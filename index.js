@@ -1,6 +1,7 @@
 const express = require('express')
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+
+const mongoDBConnected = require('./db')
 
 // Load environment variables from .env
 dotenv.config();
@@ -9,13 +10,8 @@ dotenv.config();
 const app = express();
 const serverPort = process.env.SERVER_PORT;
 
-
-mongoose.connect('mongodb://127.0.0.1:27017/food_app').then(()=>{
-    console.log("connected to mongoDB");
-
-
-
-
+    // check connection
+    mongoDBConnected();
 
    // Test endpoint
    app.get('/api/v1/test', (req, res) => {
@@ -27,9 +23,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/food_app').then(()=>{
     console.log(`Server Running on Port ${serverPort}`);
   });
 
-}).catch((err)=>{
-    console.error('Error connecting to MongoDB:', err);
-});
-
+  
 
 
