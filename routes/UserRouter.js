@@ -1,5 +1,5 @@
 const express = require('express');
-const { check, validationResult } = require('express-validator');
+const { check} = require('express-validator');
 const router = express.Router();
 const UserController = require('../controllers/UserController');
 
@@ -18,7 +18,9 @@ const passwordValidation = [
 ];
 
 
-router.post('/create-user', emailValidation, passwordValidation, UserController.createUser)
+router.post('/create-user', emailValidation, passwordValidation, UserController.createUser);
+
+router.post('/login', emailValidation, passwordValidation, UserController.loginUser);
 
 
 module.exports = router;

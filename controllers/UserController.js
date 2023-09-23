@@ -3,7 +3,7 @@ const { validationResult } = require('express-validator');
 
 const createUser = async (request, response) => {
     try {
-        
+
         // Check for validation errors
         const errors = validationResult(request);
         if (!errors.isEmpty()) {
@@ -44,5 +44,42 @@ const createUser = async (request, response) => {
 };
 
 
+const loginUser = async (request, response) => {
+    try {
 
-module.exports = { createUser };
+        // Check for validation errors
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+
+        // Check if a user is exit
+        const existingUser = await UserSchema.findOne({ email: request.body.email });
+        
+        if (!existingUser) {
+            // User not found
+            return response.status(409).json({ message: 'Not found user' });
+        }else{
+
+            if(existingUser.password === request.body.password ){
+                
+                let responseUserData = {
+                    userEmail: existingUser.email,
+                    status: 201,
+                    message: 'success'
+                }
+
+                response.status(201).json(responseUserData);
+            }else{
+                response.status(403).json({ 'message': 'Password Incorrect' });
+            }
+        }
+
+    } catch (error) {
+        response.status(500).json({ error: error.message });
+    }
+};
+
+
+
+module.exports = { createUser,loginUser };
