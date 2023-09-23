@@ -4,7 +4,6 @@ var bodyParser = require('body-parser')
 const mongoDBConnected = require('./db')
 
 
-
 // Load environment variables from .env
 dotenv.config();
 

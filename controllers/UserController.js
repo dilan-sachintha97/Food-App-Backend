@@ -1,8 +1,15 @@
 const UserSchema = require('../models/User');
-
+const { validationResult } = require('express-validator');
 
 const createUser = async (request, response) => {
     try {
+        
+        // Check for validation errors
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(400).json({ errors: errors.array() });
+        }
+
         // Check if a user with the same email already exists
         const existingUser = await UserSchema.findOne({ email: request.body.email });
         
@@ -30,10 +37,12 @@ const createUser = async (request, response) => {
         };
 
         response.status(201).json(responseUserData);
-        
+
     } catch (error) {
         response.status(500).json({ error: error.message });
     }
 };
+
+
 
 module.exports = { createUser };
