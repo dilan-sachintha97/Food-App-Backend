@@ -2,6 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv');
 var bodyParser = require('body-parser')
 const mongoDBConnected = require('./db')
+const cors = require('cors'); // Import cors
 
 
 // Load environment variables from .env
@@ -18,6 +19,14 @@ app.use(bodyParser.json());
 // check connection
 mongoDBConnected();
 
+// Configure CORS to allow requests from http://localhost:3000
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+}));
+
+//router
 const UserRoute = require('./routes/UserRouter');
 app.use('/api/v1/user', UserRoute);
 
